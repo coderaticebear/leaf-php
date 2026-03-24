@@ -1,4 +1,4 @@
-# 📦 PHP Microservices (Native PHP)
+# 📦 PHP Microservices (LEAF PHP)
 
 A lightweight microservices architecture built using **native PHP (no frameworks)**.  
 This project is designed for learning how backend systems work internally—routing, request handling, and service separation.
@@ -24,28 +24,6 @@ Each service is an independent PHP application with:
 - Singleton-based router
 - Minimal and modular design
 - No external frameworks
-
----
-
-## 🧠 Architecture Flow
-
-Request → index.php → Router → Controller → Response
-
-
----
-
-## 🛠️ Setup Instructions
-
-### 1. Install dependencies
-
-composer install
-
-
-### 2. Generate autoload files
-
-composer dump-autoload
-
-
 
 ---
 
