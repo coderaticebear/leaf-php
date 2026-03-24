@@ -42,3 +42,13 @@ Understand backend fundamentals without frameworks
 Learn microservice architecture basics
 Build a custom lightweight PHP framework
 Prepare for scaling into Docker & Kubernetes environments
+
+
+## ⚙️ Usage Instructions
+### Create a New Service
+
+```
+php core create-service [service_name]
+cd [service_name]
+php -S localhost:8001
+```
