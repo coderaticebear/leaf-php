@@ -49,6 +49,5 @@ Prepare for scaling into Docker & Kubernetes environments
 
 ```
 php core create-service [service_name]
-cd [service_name]
-php -S localhost:8001
+php core serve [service_name] [port]
 ```
