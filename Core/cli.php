@@ -38,7 +38,8 @@ class CLI{
 
         echo "Leaf-PHP CLI \n";
         echo "Usage: \n";
-        echo "php core create-service [service_name]\n";
+        echo "create new service: php core create-service [service_name]\n";
+        echo "run service: php core serve [service_name] [port]\n";
     }
 
     private function createService($serviceName) {

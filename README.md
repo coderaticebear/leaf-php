@@ -57,3 +57,9 @@ php core create-service [service_name]
 php core serve [service_name] [port]
 
 ```
+
+### Help
+
+```
+php core help
+```
