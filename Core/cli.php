@@ -36,10 +36,50 @@ class CLI{
 
     private function help() {
 
-        echo "Leaf-PHP CLI \n";
-        echo "Usage: \n";
-        echo "create new service: php core create-service [service_name]\n";
-        echo "run service: php core serve [service_name] [port]\n";
+
+        // Colors
+        $green  = "\033[32m";
+        $cyan   = "\033[36m";
+        $yellow = "\033[33m";
+        $white  = "\033[37m";
+        $bold   = "\033[1m";
+        $reset  = "\033[0m";
+
+        echo "\n";
+
+        // ASCII Banner (Green + Bold)
+        echo $green . $bold;
+        echo "██╗     ███████╗ █████╗ ███████╗    ██████╗ ██╗  ██╗██████╗ \n";
+        echo "██║     ██╔════╝██╔══██╗██╔════╝    ██╔══██╗██║  ██║██╔══██╗\n";
+        echo "██║     █████╗  ███████║█████╗      ██████╔╝███████║██████╔╝\n";
+        echo "██║     ██╔══╝  ██╔══██║██╔══╝      ██╔═══╝ ██╔══██║██╔═══╝ \n";
+        echo "███████╗███████╗██║  ██║██║         ██║     ██║  ██║██║     \n";
+        echo "╚══════╝╚══════╝╚═╝  ╚═╝╚═╝         ╚═╝     ╚═╝  ╚═╝╚═╝     \n";
+        echo $reset;
+
+        echo "\n";
+
+        // Title
+        echo $bold . $white . "Leaf-PHP CLI\n" . $reset;
+        echo $white . "──────────────────────────────────────────────\n" . $reset;
+
+        // Commands
+        echo "\n" . $yellow . "Commands:\n\n" . $reset;
+
+        echo "  " . $cyan . "create-service" . $reset . "   Create a new microservice\n";
+        echo "                   → " . $green . "php core create-service <service_name>" . $reset . "\n\n";
+
+        echo "  " . $cyan . "serve" . $reset . "            Run a service locally\n";
+        echo "                   → " . $green . "php core serve <service_name> [port]" . $reset . "\n\n";
+
+        echo $white . "──────────────────────────────────────────────\n" . $reset;
+
+        // Example
+        echo $yellow . "Example:\n" . $reset;
+        echo "   " . $green . "php core create-service user-service\n" . $reset;
+        echo "   " . $green . "php core serve user-service 8000\n" . $reset;
+
+        echo "\n";
     }
 
     private function createService($serviceName) {
@@ -86,6 +126,7 @@ class CLI{
             {
                 public function hello(\$request)
                 {
+                    \$name = \$request->query('name', '$serviceName');
                     return Response::json([
                         "message" => "Hello from \$name",
                     ]);
@@ -93,7 +134,7 @@ class CLI{
 
                 public function postHello(\$request)
                 {
-                    \$name = \$request->input('name', 'Guest');
+                    \$name = \$request->input('name', '$serviceName');
                     return Response::json([
                         "message" => "Hello (POST) \$name from \$name",
                     ]);
