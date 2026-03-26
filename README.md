@@ -1,4 +1,4 @@
-# 📦 PHP Microservices (LEAF PHP)
+# 📦 Leaf PHP
 
 A lightweight microservices architecture built using **native PHP (no frameworks)**.  
 This project is designed for learning how backend systems work internally—routing, request handling, and service separation.
@@ -27,14 +27,6 @@ Each service is an independent PHP application with:
 
 ---
 
-## ▶️ Run a Service
-
-Navigate to a service folder:
-
-
-cd user-service
-php -S localhost:8000
-
 
 ## 🎯 Goals of This Project
 
@@ -45,9 +37,23 @@ Prepare for scaling into Docker & Kubernetes environments
 
 
 ## ⚙️ Usage Instructions
+
+### Clone the repository
+
+```
+git clone git@github.com:coderaticebear/leaf-php.git
+
+```
 ### Create a New Service
 
 ```
 php core create-service [service_name]
+
+```
+
+### Run a service
+
+```
 php core serve [service_name] [port]
+
 ```
