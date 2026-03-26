@@ -1,0 +1,13 @@
+{
+    "version" : "0.0.1 pre-alpha",
+    "services" : [
+        {
+            "name" : "service-one",
+            "port" : 8000
+        },
+        {
+            "name" : "newService",
+            "port" : 8001
+        }
+    ]
+}

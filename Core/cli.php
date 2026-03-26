@@ -24,6 +24,9 @@ class CLI{
             case 'help':
                 $this->help();
                 break;
+            case 'serve':
+                $this->serve($argv[2] ?? null, $argv[3] ?? null);
+                break;
             default:
                 echo "Unknown command: $command\n";
                 $this->help();
@@ -100,6 +103,37 @@ class CLI{
         file_put_contents("$serviceDir/Controller.php", $controllerContent);
 
         echo "Service $serviceName created successfully at $serviceDir\n";
+    }
+
+    private function serve($serviceName, $port) {
+            
+        if(!$serviceName) {
+            echo "Service name requried\n";
+            exit;
+        }
+
+        $serviceDir = __DIR__."/../$serviceName";
+
+        if(!is_dir($serviceDir)) {
+            echo "Service doesnot exists!\n";
+            exit;
+        }
+
+        // shell_exec()
+        $indexPath = $serviceDir . '/index.php';
+
+        if(!file_exists($indexPath)) {
+            echo "Index not found\n";
+            exit;
+        }
+
+        $host = "localhost:$port";
+        echo "$serviceName is running at $host\n";
+
+        passthru("php -S $host -t $serviceDir");
+
+       
+
     }
 }
 
