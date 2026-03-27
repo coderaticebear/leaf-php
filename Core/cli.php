@@ -7,7 +7,11 @@ if (php_sapi_name() !== 'cli') {
 }
 
 class CLI{
+    private $configData;
 
+    public function __construct() {
+        $this->configData = $this->validateLeafConfig();
+    }
     public function run($argv) {
         
         if(!isset($argv[1])) {
@@ -29,6 +33,9 @@ class CLI{
                 break;
             case 'version':
                 $this->version();
+                break;
+            case 'validate':
+                $this->validateLeafConfig();
                 break;
             default:
                 echo "Unknown command: $command\n";
@@ -101,16 +108,6 @@ class CLI{
             exit;
         }
 
-        try {
-            $leafConfig = json_decode(file_get_contents(__DIR__.'/../leaf.json'));
-
-            if(json_last_error() == JSON_ERROR_NONE) {
-                echo "$leafConfig->version\n";
-                exit;
-            }
-        } catch(Exception) {
-                echo "Unable to read configuration file\n";
-        }
 
         //Create service folder
 
@@ -161,7 +158,11 @@ class CLI{
 
         file_put_contents("$serviceDir/Controller.php", $controllerContent);
 
-        
+        //update config file
+
+        $leafServices[] = $leafConfig->services;
+
+
 
         echo "Service $serviceName created successfully at $serviceDir\n";
     }
@@ -199,19 +200,55 @@ class CLI{
 
     private function version() {
 
-        try {
-            $json = json_decode(file_get_contents(__DIR__.'/../leaf.json'));
+        echo $this->configData['version']."\n";
+    }
 
-            if(json_last_error() == JSON_ERROR_NONE) {
-                echo "$json->version\n";
-                exit;
-            }
-        } catch(Exception) {
-                echo "Unable to read configuration file\n";
+    private function validateLeafConfig() {
+
+        //Color code
+        $green  = "\033[32m";
+        $red    = "\033[31m";
+
+        $reset  = "\033[0m";
+
+        if (!file_exists(__DIR__.'/../leaf.json')) {
+            echo "$red Couldnot read config file! Please check if file exists! $reset\n";
+            exit;
         }
 
-        
+        $json = json_decode(file_get_contents(__DIR__.'/../leaf.json'), true);
 
+        if(json_last_error() == JSON_ERROR_NONE) {
+            
+
+
+            if(!array_key_exists('version', $json)) {
+                echo "$red Unable to read configuration file $reset\n";
+                exit;
+            }
+
+            if(array_key_exists('services', $json)) {
+                foreach($json['services'] as $index => $service) {
+                   
+                    $serviceName = $service['name'];
+                    $serviceDir = __DIR__."/../$serviceName";
+
+                    if(!is_dir($serviceDir)) {
+                        echo "$red$serviceName not found$reset\n";
+                        unset($json['services'][$index]);
+                    } else {
+                        echo "$serviceName found\n";
+                    }
+                }
+            }
+            $json['services'] = array_values($json['services']);
+            file_put_contents(__DIR__.'/../leaf.json', json_encode($json, JSON_PRETTY_PRINT));
+            return $json;
+        } 
+        
+        echo "$red Unable to read configuration file $reset\n";
+        exit;
+        
     }
 }
 
