@@ -27,6 +27,9 @@ class CLI{
             case 'serve':
                 $this->serve($argv[2] ?? null, $argv[3] ?? null);
                 break;
+            case 'version':
+                $this->version();
+                break;
             default:
                 echo "Unknown command: $command\n";
                 $this->help();
@@ -72,6 +75,9 @@ class CLI{
         echo "  " . $cyan . "serve" . $reset . "            Run a service locally\n";
         echo "                   → " . $green . "php core serve <service_name> [port]" . $reset . "\n\n";
 
+        echo "  " . $cyan . "version" . $reset . "          Find Version\n";
+        echo "                   → " . $green . "php core version" . $reset . "\n\n";
+
         echo $white . "──────────────────────────────────────────────\n" . $reset;
 
         // Example
@@ -95,12 +101,23 @@ class CLI{
             exit;
         }
 
+        try {
+            $leafConfig = json_decode(file_get_contents(__DIR__.'/../leaf.json'));
+
+            if(json_last_error() == JSON_ERROR_NONE) {
+                echo "$leafConfig->version\n";
+                exit;
+            }
+        } catch(Exception) {
+                echo "Unable to read configuration file\n";
+        }
+
         //Create service folder
 
         mkdir($serviceDir, 0777, true);
 
         //Create index.php
-
+        echo "Creating Index";
         $indexData = <<<PHP
 
         <?php
@@ -118,7 +135,7 @@ class CLI{
         PHP;
 
         file_put_contents("$serviceDir/index.php", $indexData);
-
+        echo "Creating controller";
         $controllerContent = <<<PHP
             <?php
 
@@ -143,6 +160,8 @@ class CLI{
         PHP;
 
         file_put_contents("$serviceDir/Controller.php", $controllerContent);
+
+        
 
         echo "Service $serviceName created successfully at $serviceDir\n";
     }
@@ -175,6 +194,23 @@ class CLI{
         passthru("php -S $host -t $serviceDir");
 
        
+
+    }
+
+    private function version() {
+
+        try {
+            $json = json_decode(file_get_contents(__DIR__.'/../leaf.json'));
+
+            if(json_last_error() == JSON_ERROR_NONE) {
+                echo "$json->version\n";
+                exit;
+            }
+        } catch(Exception) {
+                echo "Unable to read configuration file\n";
+        }
+
+        
 
     }
 }
